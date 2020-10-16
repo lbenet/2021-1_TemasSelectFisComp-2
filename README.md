@@ -55,12 +55,10 @@ En este curso estudiaremos sistemas dinámicos explotando métodos numéricos av
 
 ### Preparación
 
-1. Instalar `git`
-	Seguir las instrucciones descritas en https://www.atlassian.com/git/tutorials/install-git, que dependen de la plataforma que usan.
-2. Instalar Julia 1.5.2
-	Ir a https://julialang.org/downloads/, descargar la última versión estable actual (1.5.2) que sea adecuada a su plataforma.	
-3. Verificar el funcionamiento de Julia
-	Abran la aplicación que acaban de instalar y corran el comando: `1+1`.
- 4. Instalar las paqueterías de Julia que usaremos en el curso
-	 Abran la aplicación `Julia`. Desde la línea de comandos, 
+1. Instalar `git`:
+    Seguir las instrucciones descritas en https://www.atlassian.com/git/tutorials/install-git, que dependen de la plataforma que usan.
+2. Instalar Julia 1.5.2: 
+    Ir a https://julialang.org/downloads/, descargar la última versión estable actual (1.5.2) que sea adecuada a su plataforma.	
+3. Verificar el funcionamiento de Julia:
+    Abran la aplicación que acaban de instalar y corran el comando: `1+1`.
  
