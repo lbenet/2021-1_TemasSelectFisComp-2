@@ -2,7 +2,7 @@
 
 En este directorio encontrarán los archivos donde se enuncian las tareas. Los archivos estarán en formato `jm` e incluirán la fecha del envío del PR inicial, y la fecha en la que la tarea debe estar completamente finalizada, es decir, el PR debe ser aceptado.
 
-Pueden seguir las instrucciones descritas [en clases/README.md](../clases/README.md) para convertir los archivos `.jl`, escritos con [`Literate.jl`](https://github.com/fredrikekre/Literate.jl), al formato `.ipynb` y hacerlas desde `Jupyter`. 
+Pueden seguir las instrucciones descritas en [clases/README.md](../clases/README.md) para convertir los archivos `.jl`, escritos con [`Literate.jl`](https://github.com/fredrikekre/Literate.jl), al formato `.ipynb` y hacerlas desde `Jupyter`. 
 
 # Reglas
 
