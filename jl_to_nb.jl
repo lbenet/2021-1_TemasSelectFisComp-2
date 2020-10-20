@@ -1,14 +1,19 @@
 # jl_to_ipynb.jl
 #
-# Correr desde la línea de comandos:
+# Correr desde la línea de comandos (como "script") usando:
 # 
-#     julia jl_to_ipynb.jl clases/1-IntrodJulia.jl
+#     julia jl_to_nb.jl clase.jl
 #
-# Esto producirá el archivo "1-IntrodJulia.ipynb" en el directorio "notebooks/"
-#
-
-# file = basename(ARGS[1])
-
+# Esto usará el archivo clases/clase.jl y producirá el archivo clase.ipynb en el 
+# directorio "notebooks/". Si se quiere generar el Jupyter notebook de las tareas,
+# hay que usar
+#     $ julia jl_to_nb.jl tarea.jl  false
+# que creará el archivo tarea.ipynb en el directorio "tareas/".
+# 
+# Alternativamente, se puede utilizar desde el REPL:
+#     julia> include("jl_to_nb.jl")
+# Aparecerá información de cómo usar la función `to_notebook`.
+# 
 
 using Pkg
 Pkg.activate(".");
@@ -38,7 +43,7 @@ function to_notebook(::Val{false}, inputfile::String, in_clases::Bool=true)
     println("Done")
 end
 
-if @show(length(ARGS)) > 0
+if length(ARGS) > 0
     # Funciona como script
     if (length(ARGS)==1 || lowercase(ARGS[2]) == "true")
         to_notebook(Val(true), ARGS[1])
