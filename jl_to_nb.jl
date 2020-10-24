@@ -55,7 +55,7 @@ if length(ARGS) > 0
 else
     @info("""\nPara convertir al notebook ejecuta la función\n 
 
-        `to_notebook(::Val(false), inputfile, in_clases)`
+        `to_notebook(Val(false), inputfile, in_clases)`
     
     donde `inputfile` es el nombre del archivo que quieres convertir, 
     e `in_clases::Bool` es un booleano que implica que el archivo está en 
