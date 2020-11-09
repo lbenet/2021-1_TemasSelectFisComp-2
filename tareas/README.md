@@ -24,6 +24,7 @@ A continuación se especifican las fechas en que el PR con la tarea debe ser env
 
 |                                   | PR inicial | Aceptación del PR  |         Estado         |
 |:------------------|:------------------------:|:-----------------------:|:----------------------:|
-|        Tarea 1            |  23/10/2020 |  30/10/2020  | Abierta  |
+|        Tarea 1            |  23/10/2020 |  13/11/2020  | Abierta  |
+|        Tarea 2            |  13/11/2020 |  23/11/2020  | Abierta  |
 
 
