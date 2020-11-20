@@ -142,14 +142,14 @@ newton!(f,df,10.0, raicesf, Delta; tolerancia = 1e-9, max_iteraciones = 30)
 using Plots
 
 #-
-x = 1.0:7:0
-y = Delta
+x = 1.0:7.0
+y = Delta .+ 1e-10
 scatter(x, y, yscale = :log10, title = "No. pasos vs Delta", xlabel = "Pasos", ylabel = "Delta" , label = "Delta", lw = 3)
 
 #-
 # Por lo tanto, garantizamos la convergencia del método para la funcion *f* de forma cuadrática,
-# puesto que la diferencia se va haciendo cada vez más pequeña, hasta llegar a cero. La gráfica
-# anterior muestra este decaimiento.
+# pero de forma exponencial, puesto que la escala del eje *y* es logarítmica, y la diferencia
+# se va haciendo cada vez más pequeña, hasta llegar a cero. La gráfica anterior muestra este decaimiento.
 
 #-
 
