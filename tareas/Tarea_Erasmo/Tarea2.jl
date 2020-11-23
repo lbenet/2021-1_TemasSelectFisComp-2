@@ -423,5 +423,3 @@ plot!(x, y2, label = "Analítica", ls = :dash, lw = 3)
 # así como las funciones sobre duales. De hecho, para obtener una 
 # derivada de orden dieciocho, este trabajo se vuelve monumental, por lo 
 # que éste no es un método adecuado para proceder.
-#
-# 
