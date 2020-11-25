@@ -236,49 +236,21 @@ Df(1)
 import Base: sqrt, exp, log, sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, acosh, atanh
 #-
 
-### Raíz
-
-sqrt(D::Dual) = (aux = sqrt(D[1]) ; Dual(aux, D[2] / (2 * aux)) )
+ff = [:sqrt, :exp, :log, :sin, :cos, :tan, :asin, :acos, :atan, :sinh, :cosh, :tanh, :asinh, :acosh, :atanh]
+df1 = [x->inv(2*sqrt(x)), :exp, x->inv(x), :cos, x->-sin(x), x->sec(x)^2]
+df2 = [x->inv(sqrt(1 - x^2)), x->-inv(sqrt(1 - x^2)), x->inv(1 + x^2), :cosh, :sinh, x->sech(x)^2]
+df3 = [x->inv(sqrt(1 + x^2)), x->inv(sqrt(x^2 - 1)), x->inv(1 - x^2)]
+df = vcat(df1, df2, df3)
 #-
 
-### Exponencial
+for (i, f) in enumerate(ff)
+    d = df[i]
+    eval( :( $f(a::Dual) = Dual( $f(a.fun), a.der * $d(a.fun) ) ) )
+end
+#-
 
-exp(D::Dual) = Dual(exp(D[1]), D[2] * exp(D[1]))
 ^(b, D::Dual) = Dual(b^D[1], D[2] * log(b) * b^D[1])
-#-
-
-### Logaritmo
-
-log(D::Dual) = Dual(log(D[1]), D[2] / D[1])
 log(b, D::Dual) = Dual( log(b, D[1]), D[2] / (log(b) * D[1]) )
-#-
-
-### Trigonométricas
-
-sin(D::Dual) = Dual(sin(D[1]), D[2] * cos(D[1]))
-cos(D::Dual) = Dual(cos(D[1]), - D[2] * sin(D[1]))
-tan(D::Dual) = Dual(tan(D[1]), D[2] / cos(D[1])^2)
-#-
-
-### Trigonométricas inversas
-
-asin(D::Dual) = Dual( asin(D[1]), D[2] / sqrt(1 - D[1]^2) )
-acos(D::Dual) = Dual( acos(D[1]), - D[2] / sqrt(1 - D[1]^2) )
-atan(D::Dual) = Dual( atan(D[1]), D[2] / (1 + D[1]^2) )
-#-
-
-### Hiperbólicas
-
-sinh(D::Dual) = Dual(sinh(D[1]), D[2] * cosh(D[1]))
-cosh(D::Dual) = Dual(cosh(D[1]), D[2] * sinh(D[1]))
-tanh(D::Dual) = Dual( tanh(D[1]), D[2] / cosh(D[1])^2 )
-#-
-
-## Hiperbólicas inversas
-
-asinh(D::Dual) = Dual( asinh(D[1]), D[2] / sqrt(1 + D[1]^2) )
-acosh(D::Dual) = Dual( acosh(D[1]), D[2] / sqrt(D[1]^2 - 1) )
-atanh(D::Dual) = Dual(atanh(D[1]), D[2] / (1 - D[1]^2))
 #-
 
 # - Muestren que su implementación da los resultados que se esperan 
@@ -370,7 +342,7 @@ abs(Dh(big(2))[2] - h_prime(big(2)))
 
 # - Grafiquen, para $x_0\in[1,5]$ la función $h^\prime(x)$.
 
-using Pkg; Pkg.activate("../")  # activa el "ambiente" de paquetes usados
+using Pkg; Pkg.activate("../../")  # activa el "ambiente" de paquetes usados
 Pkg.instantiate()  # descarga las dependencias de los paquetes
 using Plots
 #-
