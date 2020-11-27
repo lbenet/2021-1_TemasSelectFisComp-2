@@ -189,7 +189,7 @@ end
 #-
 x = rango1
 y = raices2
-scatter(x, y, yscale = :log10, title = "X0 vs Raíz", xlabel = "Condición inicial", ylabel = "Raíz" , label = "Raíz", lw = 3)
+scatter(x, y, title = "X0 vs Raíz", xlabel = "Condición inicial", ylabel = "Raíz" , label = "Raíz", lw = 3)
 
 #-
 # Graficamos ambas raíces para ver con mejor detalle las valores posibles. En la
@@ -209,7 +209,16 @@ raices2[25] = sqrt(2)
 
 #-
 # Insertamos la raíz de 2 en el arreglo de raíces para ver con mejor detalle donde
-# está la falla, nótese que al graficar nos arroja un error.
+# está la falla, nótese que al graficar nos arroja un error, , lo que es mejor ver
+# cuál es el error más grande que podemos obtener de las raíces.
+
+#-
+maximum(abs.(abs.(raices2) .- sqrt(2.0)))
+
+#-
+
+# El error anterior es de orden de 1e-16, es decir es muy pequeño, entonces es muestra mejor
+# las diferencias que se comentaron justamente arriba.
 
 #-
 x = rango1
