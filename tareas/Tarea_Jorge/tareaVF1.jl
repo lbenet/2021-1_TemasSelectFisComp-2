@@ -1,3 +1,6 @@
+# ## $$\textbf{Tarea 1}$$
+# #$$\textit{Raúl Jorge Domínguez Vilchis}$$
+
 using Pkg; Pkg.activate("../..")  # activa el "ambiente" de paquetes usados
 Pkg.instantiate()  # descarga las dependencias de los paquetes
 
@@ -9,6 +12,15 @@ Pkg.instantiate()  # descarga las dependencias de los paquetes
 # - condición inicial o adivinanza de la que va a partir el cálculo 
 # - itera indicar el número de iteraciones que va a usar el método de Newton
 
+
+"""
+La función newton, implementa el método de Newton, la cual acepta 4 parámetros
+- f la función la cual queremos calcular las raíces 
+- fprime la derivada de la funcion f
+- x0 condición inicial o adivinanza de la que va a partir el cálculo 
+- itera indica el número de iteraciones que va a usar el método de Newton
+...
+"""
 function newton(f,fprime,x0,itera) 
  x = x0 - (f(x0)/fprime(x0)) #metodo de newton 
     for i in 1:itera #Iniciamos el número de iteraciones que se van a hacer 
@@ -18,21 +30,38 @@ function newton(f,fprime,x0,itera)
  return x #raíz aproximada
 end  
 
-#Definimos la función f(x) y su derivada.
+# Definimos la función f(x) y su derivada.
 
+#-
 f(x)=x^2-2
 
 fprime(x)=2x
+#-
 
 newton(f,fprime,50.0,1000)
 
+#-
+
 using Plots
+
+#-
 
 # Creamos una nueva función, para observar la convergencia del método de Newton
 # en función del número de iteraciones, tenemos ahora los sig. párametros
 # - r_aproximada es una arreglo donde guardamos la aproximacion de cada raíz con cada iteración 
 # - i es un arreglo donde simplemente guardamos el número de iteraciones
 
+"""
+Función de convergencia del método de Newton, convergencia_newton, acepta los siguientes parámetros:
+f: la función 
+fprime: la derivada de la función f
+x0: la condición inicial
+itera: el número de iteraciones
+La función nos regresa los siguientes arreglos:
+r_aproximada: es una arreglo donde guardamos la aproximacion de cada raíz con cada iteración 
+i: es un arreglo donde simplemente guardamos el número de iteraciones
+...
+"""
 function convergencia_newton(f,fprime,x0,itera)
    global r_aproximada = Float64[]
    global i = Int64[]
@@ -45,13 +74,17 @@ function convergencia_newton(f,fprime,x0,itera)
  return (i, r_aproximada)
 end 
 
-# Comprabamos que la función "convergencia_newton" funciona, 
+# Ahora comprobamos que la función "convergencia_newton" funciona, 
 # donde ingresamos la función f, su derivada fprime, la condición inicial x0 y 
 # por último el número de iteraciones que se van a realizar
 
+#-
+
 convergencia_newton(f,fprime, 10,7)
 
-#Graficamos los datos obtenidos anteriormente, implementamos una nueva función
+#-
+
+# Graficamos los datos obtenidos anteriormente, implementamos una nueva función
 # que acepta como parámetros:
 # la función a la cual queremos obtener una raíz: f
 # la derivada de la función: fprime
@@ -61,9 +94,21 @@ convergencia_newton(f,fprime, 10,7)
 # La salida de esta función nos mostrará la gráfica del error y
 # de la raíz aproximada en función del número de iteraciones
 
+"""
+Generamos una función para graficar los datos obtenidos, gr_erro_raiz, acepta los siguientes parámetros:
+f: la función 
+fprime: la derivada de la función f
+x0: la condición inicial
+r_real: la raíz real conocida de la función 
+iteraciones: el número de iteraciones
+La función genera la gráfica del error del método de Newton, como la aproxiamción al valor real, 
+respecto al número de iteraciones
+r_error: arreglo donde guardamos |xn - x*|
+...
+"""
 function gr_error_raiz(f,fprime,r_real,x0,iteraciones)
     
-    r_error = Float64[] #arreglo donde guardamos |xn - x*|
+    r_error = Float64[] 
     aprox = convergencia_newton(f,fprime,x0,iteraciones) #llamamos a la función para generar la aproximación de la raíz 
     
       for j in 1:iteraciones
@@ -83,7 +128,7 @@ end
 # la función acepta un parámetro llamdo ci que es la condición inicial
 # y como es de esperarse cf es la condición final
 # donde vamos a recorrer este intervalo (ci,cf) en tamaños de pasos del parémtro paso 
-#como salida de esta función, nos mostrara la raíz calculada por el método de Newton en función de las condiones iniciales 
+# como salida de esta función, nos mostrara la raíz calculada por el método de Newton en función de las condiones iniciales 
 
 function newton_ci_cf(f,fprime,iteraciones,ci,cf,paso)
 it = Float64[]
@@ -98,14 +143,15 @@ b=scatter(it, rz, xlabel="Condicion Inicial",ylabel="Aproximacion",title="Condic
 return b
 end
 
-#Repetimos la función anterior con las nuevas funciones g(x) y gprime(X)
+# Repetimos la función anterior con las nuevas funciones g(x) y gprime(X)
 
 g(x) = (x-1)*(x-2)*(x-3)
 gprime(x)= 3x^2 -12x + 11
+
 newton_ci_cf(g,gprime,15,1,3,0.025)
 
 # Podemos observar que, como es de esperarse tenemos 3 raices diferentes debido a que tenemos una ecuacion de tercer grado
-# dependiendo de la condicion inicial, es curioso ya que como se observa en la gráfica, hay intervalos donde la raíz da ciertos
+# dependiendo de la condicion inicial. Es curioso ya que como se observa en la gráfica, hay intervalos donde la raíz da ciertos
 # brincos, si ahora iteramos cerca de estos puntos de interés observamos lo siguiente
 
 newton_ci_cf(g,gprime,15,1.3,1.7,0.004)
