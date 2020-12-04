@@ -26,5 +26,6 @@ A continuación se especifican las fechas en que el PR con la tarea debe ser env
 |:------------------|:------------------------:|:-----------------------:|:----------------------:|
 |        Tarea 1            |  23/10/2020 |  13/11/2020  | Abierta  |
 |        Tarea 2            |  13/11/2020 |  23/11/2020  | Abierta  |
+|        Tarea 3            |  04/12/2020 |  11/12/2020  | Abierta  |
 
 
