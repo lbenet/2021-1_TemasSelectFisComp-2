@@ -1,7 +1,7 @@
 # # Tarea 4
 # 
-# Fecha inicial de entrega (envío del PR): 
-# Fecha aceptación del PR: 
+# Fecha inicial de entrega (envío del PR): 4.01.2021
+# Fecha aceptación del PR: 8.01.2021
 # 
 # ---
 
@@ -14,7 +14,7 @@
 # los coeficientes $x_{[k]}$, *en cada paso de integración*, a partir de la condición 
 # inicial "local" (al tiempo de interés). Un requisito básico para que esto 
 # pueda funcionar es que tengan una implementación de la función 
-# ``P_\alpha(x) = [g(x)]^\alpha`` donde $g(x)$ un polinomio de Taylor, que hicieron 
+# $P_\alpha(x) = [g(x)]^\alpha$ donde $g(x)$ un polinomio de Taylor, que hicieron 
 # en la tarea anterior.
 # 
 # La implementación debe consistir de varias funciones intermedias: 
@@ -42,7 +42,8 @@
 
 # ## 2
 # 
-# Repitan el ejercicio anterior (integración de $\dot{x} = x^2$ con $x(0)=3$) usando el 
+# Repitan el ejercicio anterior, integración de $\dot{x} = x^2$ con la condición 
+# inicial $x(0)=3$, usando el 
 # método de Runge-Kutta de 4o orden con paso de integración fijo y comparen los 
 # resultados del error relativo con los obtenidos con el método de Taylor. 
 # 

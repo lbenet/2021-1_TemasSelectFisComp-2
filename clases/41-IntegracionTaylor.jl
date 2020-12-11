@@ -193,7 +193,7 @@
 # uno puede demostrar que los coeficientes $x_{[k]}$ de la solución están dados por
 # 
 # \begin{equation}
-# x_{[k]} = \frac{f_{[k-1]}}{k},
+# x_{[k+1]} = \frac{f_{[k]}}{k+1},
 # \end{equation}
 # 
 # donde los coeficientes $f_{[k]}$ son los coeficientes del desarrollo en serie de 
@@ -230,7 +230,7 @@
 
 #-
 
-# Queremos, entonces, truncar la serie en un $p$ finito *suficientemente grande* de tal 
+# Queremos, entonces, truncar la serie en un $p$ *suficientemente grande* (finito) de tal 
 # manera que el residuo sea pequeño.
 
 #-
