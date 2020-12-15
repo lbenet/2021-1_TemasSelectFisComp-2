@@ -131,7 +131,7 @@ import Base: -
 -(D::Dual) = Dual(-D[1], -D[2])
 -(D1::Dual, D2::Dual) = Dual(D1[1] - D2[1], D1[2] - D2[2])
 -(D2::Dual, D1::Dual) = Dual(D2[1] - D1[1], D2[2] - D1[2])
--(r::Real, D3::Dual) = Dual(r - D3[1], D3[2])
+-(r::Real, D3::Dual) = Dual(r - D3[1],  -D3[2])
 -(D::Dual, c::Real) = Dual(D[1] - c, D[2] )
 #-
 
