@@ -193,38 +193,36 @@ end;
 # en el punto $x_0=1$ usando aritmética de racionales.
 
 f(x) = (3x^2-8x+5)/(7x^3-1)
-f(1)
-#-
-
-# Sean $f_1(x) = 3x^2-8x+5$ y $f_2(x) = 7x^3-1$ de tal forma 
-# que $f(x) = f_1(x) / f_2(x)$.
-
-f1(x) = 3 * x^2 - 8 * x + 5
-f1_prime(x) = 6 * x - 8
-Df1(x) = Dual(f1(x), f1_prime(x))
-#-
-
-f2(x) = 7 * x^3 - 1
-f2_prime(x) = 21 * x^2
-Df2(x) = Dual(f2(x), f2_prime(x))
-#-
-
-Df1(1) / Df2(1)
+f(dual(1.0))
 #-
 
 # - Evalúen analíticamente (usando el álgebra  de duales) la 
 # función `f(x)` en la variable independiente en $x_0=1$, a fin 
 # de verificar que el resultado obtenido es el correcto.
-
-Df(x) = (3 * dual(x)^2 - 8 * dual(x) + 5) / (7 * dual(x)^3 - 1)
-Df(1)
 #-
 
-# Se obtuvo, por lo tres métodos, que $f(1) = 0$. En ambos 
-# métodos en los que usaron duales también se obtuvo que 
-# $f'(1) = - 1 / 3$. Sin embargo, de los dos métodos con duales, 
-# el segundo fue más práctico ya que en el primero fue necesario 
-# escribir explícitamente un par de derivadas.
+# Sean $\mathbb{D}u = (1, 1)$, $f_1(x) = 3x^2-8x+5$ y $f_2(x) = 7x^3-1$
+# de tal forma que $f(x) = f_1(x) / f_2(x)$.
+#
+# Nótese que
+#
+# $$ \mathbb{D}u^{\alpha} = (1^{\alpha}, \alpha 1^{\alpha} 1)  = (1, \alpha) ,$$
+#
+# de tal forma que
+#
+# \begin{align}
+#     f_1(\mathbb{D}u) &= 3 (1, 2) - 8 (1, 1) + 5 (1, 0) = (0, -2) \\
+#     f_2(\mathbb{D}u) &= 7 (1, 3) - (1, 0) = (6, 21) ,
+# \end{align}
+#
+# por lo tanto
+#
+# \begin{align}
+#     f(\mathbb{D}u) &= \frac{f_1(\mathbb{D}u)}{f_2(\mathbb{D}u)} = \frac{(0, -2)}{(6, 21)} \\
+#         &= \left( \frac{0}{6}, \frac{-12 - 0}{6^2} \right) \\
+#         &= \left(0, - \frac{1}{3} \right)
+# \end{align}
+#-
 
 # ## 3
 # 
@@ -373,11 +371,11 @@ plot!(x, y2, label = "Analítica", ls = :dash, lw = 3)
 # Ya se ha hecho bastante trabajo, así que se podría trabajar con duales 
 # de tal forma que las partes función y derivada de un dual fuera las 
 # derivadas diecisite y dieciocho de una función. Ahora el único trabajo 
-# se vuelvo llegar a dichas derivadas a partir de la función misma...
+# es llegar a dichas derivadas a partir de la función misma...
 #
-# Una primera, que Luis me terminó de aclarar, es la de extender la 
+# Una forma, que Luis me terminó de aclarar, es la de extender la 
 # idea de dual de tal forma que considera dervidas de orden superior.
-# Se se desea trabajar hasta con la $n$ ésima derivada, entonces el 
+# Si se desea trabajar hasta con la $n$ ésima derivada, entonces el 
 # objeto de interés no sería un par ordenadado sino todo un vector de
 # $n + 1$ entradas, donde la entrada $m$ corresponde a la $m$ ésima derivada
 # de $f(x)$ evaluada en $x_0$. Esto es
@@ -389,7 +387,7 @@ plot!(x, y2, label = "Analítica", ls = :dash, lw = 3)
 # que ahora se considera que $\epsilon$ es tal que $\epsilon^{n + 1} = 0$.
 # 
 # La ventaja de este método es que no agrega ninguna dificultad a la hora 
-# de definir los nuevos duales para la función constane y la función 
+# de definir los nuevos duales para la función constante y la función 
 # identidad, ya que el resto de entradas tendrán el mismo valor de cero.
 # Donde entra el trabajo es en redefinir las operaciones entre duales
 # así como las funciones sobre duales. De hecho, para obtener una 
