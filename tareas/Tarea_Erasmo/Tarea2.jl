@@ -206,7 +206,7 @@ f(dual(1.0))
 #
 # Nótese que
 #
-# $$ \mathbb{D}u^{\alpha} = (1^{\alpha}, \alpha 1^{\alpha} 1)  = (1, \alpha) ,$$
+# $$ \mathbb{D}u^{\alpha} = (1^{\alpha}, \alpha 1^{\alpha - 1} 1)  = (1, \alpha) ,$$
 #
 # de tal forma que
 #
@@ -222,6 +222,11 @@ f(dual(1.0))
 #         &= \left( \frac{0}{6}, \frac{-12 - 0}{6^2} \right) \\
 #         &= \left(0, - \frac{1}{3} \right)
 # \end{align}
+#
+# Este resultado analítico es consistente con el resultado
+# numérico $(0.0, -0.3333333333333333)$, donde la diferencia
+# entre los resultados de ambos métodos se debe únicamente al
+# redondeo de la computadora, que usa números de punto flotante.
 #-
 
 # ## 3
@@ -280,7 +285,7 @@ log(b, D::Dual) = Dual( log(b, D[1]), D[2] / (log(b) * D[1]) )
         @test sin( dual(0) ) == Dual(0, 1)
         @test sin( dual(π / 2) ) == Dual(1, cos(π / 2))
         @test cos( dual(π / 2) ) == Dual(cos(π / 2), -1)
-        @test cos( dual(π) ) == Dual(-1, -sin(π))
+        @test cos( dual(1*π) ) == Dual(-1, -sin(1*π))
         @test tan( dual(5 * π / 4) ) == Dual(tan(5 * π / 4), sec(5 * π / 4)^2)
         @test tan( dual(0) ) == Dual(0, 1)
     end
@@ -368,11 +373,6 @@ plot!(x, y2, label = "Analítica", ls = :dash, lw = 3)
 # el obtener la derivada 18 de funciones como las que hemos usado arriba.)
 #- 
 
-# Ya se ha hecho bastante trabajo, así que se podría trabajar con duales 
-# de tal forma que las partes función y derivada de un dual fuera las 
-# derivadas diecisite y dieciocho de una función. Ahora el único trabajo 
-# es llegar a dichas derivadas a partir de la función misma...
-#
 # Una forma, que Luis me terminó de aclarar, es la de extender la 
 # idea de dual de tal forma que considera dervidas de orden superior.
 # Si se desea trabajar hasta con la $n$ ésima derivada, entonces el 
@@ -392,4 +392,5 @@ plot!(x, y2, label = "Analítica", ls = :dash, lw = 3)
 # Donde entra el trabajo es en redefinir las operaciones entre duales
 # así como las funciones sobre duales. De hecho, para obtener una 
 # derivada de orden dieciocho, este trabajo se vuelve monumental, por lo 
-# que éste no es un método adecuado para proceder.
+# que éste no es un método adecuado para proceder así que se requiere
+# un método distinto.
