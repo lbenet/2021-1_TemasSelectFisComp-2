@@ -330,6 +330,15 @@ derivadaf(1)
 
 # Por lo tanto tenermos que los resultados coinciden, ya que tenemos que la primera entra es 0 que corresponde con la función "funcionf" y la segunda entrada -0.333... coincide con la función "derivadaf", el resultado es consistente. 
 
+
+# #### Aritmética de racionales
+#-
+funcionf(Dual(1//1,1//1)) 
+#-
+
+# Notemos que el resultado es $\frac{-1}{3}$ y no -0.3333333333333333, es decir, es el valor exacto de la derivada y no una proximación como en los casos anteriores.
+
+
 # $\textit{Ejercicio 3}$
 
 # - Recordando la regla de la cadena, extiendan el uso de `Dual` a 
