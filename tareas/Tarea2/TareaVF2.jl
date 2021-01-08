@@ -662,3 +662,4 @@ plot(dom2,derivadah2,xlabel="x",ylabel="h'(x)",title="Ambas",label = ["h' dual" 
 # Argumenten qué podrían hacer para extender la idea de los `Dual` 
 # y calcular derivadas aún más altas. (Como ejemplo concreto, consideren 
 # el obtener la derivada 18 de funciones como las que hemos usado arriba.)
+#commit
