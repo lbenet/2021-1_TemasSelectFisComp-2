@@ -25,7 +25,6 @@ fun - una función arbitraria evaluada en x0
 der - la derivada de la función en x0
 ...
 """
-#-
 #Definimos la estructura paramétrica llamada Dual
 struct Dual{T <: Real}
     fun :: T
@@ -35,7 +34,7 @@ end
 
 #-
 #Promoción automática cuando las entradas del dual no son del mismo tipo
-Dual(x,y) = ( i = promote(x,y); Dual(i[1], i[2])) 
+Dual(x,y) = Dual(promote(x,y)...) 
 #-
 
 #- 
@@ -68,34 +67,35 @@ print(fun(x))
 #Ejemplo de la función der
 print(der(x))
 #-
+# #### Dual de una constante
+
 """
 dualconstante 
 como primera entrada una constante 
 en consecuencia la segunda entrada es la derivada 
 de la constante por lo que es cero
 """
-# #### Dual de una constante
 
-#-
 #Definimos la función que regresa el dual de una constante
 function dualconstante(x)
     return Dual(x, zero(x))
 end
 #-
 
-#-
+
 #ejemplo de la función dualconstante
 dualconstante(3.2)
 #-
 
 # #### Dual de la función identidad 
+#-
 
 """
 dualidentidad 
 en la primera entrada con cualquier argumento 
 en la segunda no da la función identidad, es decir, 1. 
 """
-#-
+
 #Definimos la función que regresa el dual de la función identidad evaluada en x
 function dualidentidad(x)
     return Dual(x, one(x))
@@ -336,7 +336,7 @@ derivadaf(1)
 funcionf(Dual(1//1,1//1)) 
 #-
 
-# Notemos que el resultado es $\frac{-1}{3}$ y no -0.3333333333333333, es decir, es el valor exacto de la derivada y no una proximación como en los casos anteriores.
+# Notemos que el resultado es $\frac{-1}{3}$ y no -0.3333333333333333, es decir, es el valor exacto de la derivada y no una aproximación como en los casos anteriores.
 
 
 # $\textit{Ejercicio 3}$
@@ -389,7 +389,7 @@ cos(D::Dual)= Dual(cos(fun(D)),-sin(fun(D))*der(D))
 
 #-
 import Base: tan
-tan(D::Dual)= Dual(tan(fun(D)),der(D)*sec(fun(D)))
+tan(D::Dual)= Dual(tan(fun(D)),der(D)*(sec(fun(D)))**2)
 #-
 
 #-
@@ -419,7 +419,7 @@ cosh(D::Dual)= Dual(cosh(fun(D)),der(D)*sinh(fun(D)))
 
 #-
 import Base: tanh
-tanh(D::Dual)= Dual(tanh(fun(D)),der(D)*(1/(cosh(fun(d)))^2))
+tanh(D::Dual)= Dual(tanh(fun(D)),der(D)*(1/(cosh(fun(D)))^2))
 #-
 
 #-
@@ -587,9 +587,15 @@ print(l)
 # #### Gráfica de $h(x)=\sin(x^3−\frac{2}{x^6})$  para $x\in[1,5]$
 
 #-
-#Generaremos una lista con los valores de der(hdual) para x0 en (0,5], luego graficaremos la lista en ese intervalo
+using Pkg; Pkg.activate("../")
+#-
+#Pkg.instantiate()
+#-
+#Pkg.add("Plots")
+#-
+#Generaremos una lista con los valores de der(hdual) para x0 en [1,5], luego graficaremos la lista en ese intervalo
 #Para crear la lista, definimos una lista vacia y con un ciclo for, agregamos los valores de la derivada 
-#la derivada la obtenemos usando la función der en sin(j^3-2/j^6) con j el dual i+1epsilon (i cambia en [0,5])
+#la derivada la obtenemos usando la función der en sin(j^3-2/j^6) con j el dual i+1epsilon (i cambia en [1,5])
 
 #también generaremos una lista con los valores de la derivada "reales", es decir, la derivada calculada en Wolfram
 
@@ -601,7 +607,7 @@ Dh=[]
 dom=[] 
 #lista vacía para el dominio h en escala logarítmica 
 domlog=[]
-for i in 0.5:0.001:5
+for i in 1:0.001:5
     j=Dual(i,1)
     hdual2=Float64(der(sin(j^3-2/j^6)))
     push!(Dhdual,hdual2) #llenamos con la h'dual evaluada en el dual (i,1)
@@ -611,7 +617,7 @@ for i in 0.5:0.001:5
     
 end
 #-
-
+using Plots
 #-
 #Ahora graficaremos cada una de las listas (primero por separado, luego en una misma imagen) para compararlas
 
@@ -627,7 +633,7 @@ plot(p1, p2, p3, layout = (3, 1), legend = true)
 plot!(size=(600,1200))
 #-
 
-# Se puede apreciar que la derivada es una oscilación infinita cerca del cero, por este motivo, a continuación se graficará en escala logarítmica, así se podrá apreciar mejor el comportamiento en esa zona.
+# Se puede apreciar que la derivada es una oscilación infinita cerca del cero, por este motivo, a continuación se graficará en escala logarítmica, así se apreciará mejor el comportamiento en esa zona.
 
 #-
 #Nuevamente graficaremos cada una de las listas para compararlas (ahora en escala logarítmica).
@@ -642,7 +648,7 @@ plot(p1, p2, p3, layout = (3, 1), legend = true)
 plot!(size=(600,1200))
 #-
 
-# Nota, se graficó en el intervalo (0.5,5) pues dado que la función es una oscilación infinita cerca de cero y no es acotada, los valores pequeños en el dominio son, bajo la función, muy grandes. Esto repercute en que la escala de los ejes se hace más grande y no se aprecian las oscilaciones adecuadamente.
+# Nota, se graficó en el intervalo [1,5] pues dado que la función es una oscilación infinita cerca de cero y no es acotada, los valores pequeños en el dominio son, bajo la función, muy grandes. Esto repercute en que la escala de los ejes se hace más grande y no se aprecian las oscilaciones adecuadamente.
 # No obstante, los valores de h' dual son idénticos a los de h' analítica aún cerca de cero como se muestra en la siguiente gráfica.
 
 #-
