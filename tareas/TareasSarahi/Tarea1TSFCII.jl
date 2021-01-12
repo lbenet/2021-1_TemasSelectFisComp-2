@@ -76,6 +76,7 @@
 
 #scatter(l1,l, xlabel="x", ylabel="f(x)", title = "Error Newton", color="blue", label="Error", 
 #    legend = true, linewidth = 1, grid = true)
+#prueba
 
 
 
