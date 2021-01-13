@@ -38,19 +38,19 @@
     Newton, dado un número de iteraciones límite.
     
     (f:: Función de "x", df:: derivada de f(x), x:: Condición inicial ; Tolerancia de la iteración, No. Iteraciones)
+    c -> Contador de iteraciones
+    x1 -> Variable para almacenar la condición inicial
+
 """
-function newton(f,df, x; tolerancia, max_iteraciones)
-    x0 = x               
-    c = 0       
-    x1 = 0.0    
-    while abs(f(x0)) > tolerancia || c == max_iteraciones
-         if df(x0) == 0.0
-            break
-        else
+function newton(f,df, x0; tolerancia, max_iteraciones)
+    x1 = x0               
+    c = 0        
+    while abs(f(x1)) > tolerancia || c == max_iteraciones
+        
         x1 = x0 - f(x0)/df(x0)
         x0 = x1
         c = c+1
-        end
+        
     end
     @show c
     #println("Se realizarón ", c," interaciones")
@@ -105,19 +105,16 @@ Delta = Float64[]
     entre iteraciones consecutivas.
     
 """
-function newton!(f,df, x, raiz, delta; tolerancia, max_iteraciones)
-    x0 = x               
+function newton!(f,df, x0, raiz, delta; tolerancia, max_iteraciones)
+    x1 = x0               
     c = 0       
-    x1 = 0.0    
+       
     while abs(f(x0)) > tolerancia || c == max_iteraciones
-        if df(x0) == 0.0
-            break
-        else
         x1 = x0 - f(x0)/df(x0)
         push!(raiz, x1)
         x0 = x1
         c = c+1
-        end
+        
     end
     
     for i in 1:length(raiz) 
@@ -137,6 +134,12 @@ newton!(f,df,10.0, raicesf, Delta; tolerancia = 1e-9, max_iteraciones = 30)
 
 #-
 # Procedemos a graficar el número de pasos vs. las delta de los valores iterados.
+
+#-
+import Pkg; Pkg.add("Plots")
+
+#-
+Pkg.build("GR")
 
 #-
 using Plots
@@ -202,15 +205,11 @@ scatter(x, y, title = "X0 vs Raíz", xlabel = "Condición inicial", ylabel = "Ra
 # respectivamente y de igual forma no parecen distintas de sí mismas. Si graficamos
 # el valor absoluto de éstas, podrían notarse diferencias casi insignificantes entre
 # ellos, aunque son realmente pequeñas que la misma escala de *Plots* no lo permite
-# mostrar de forma correcta.
+# mostrar de forma correcta, evitamos esa preocupación.
+
 
 #-
-raices2[25] = sqrt(2)
-
-#-
-# Insertamos la raíz de 2 en el arreglo de raíces para ver con mejor detalle donde
-# está la falla, nótese que al graficar nos arroja un error, , lo que es mejor ver
-# cuál es el error más grande que podemos obtener de las raíces.
+# Lo que es mejor ver es cuál es el error más grande que podemos obtener de las raíces.
 
 #-
 maximum(abs.(abs.(raices2) .- sqrt(2.0)))
@@ -220,10 +219,7 @@ maximum(abs.(abs.(raices2) .- sqrt(2.0)))
 # El error anterior es de orden de 1e-16, es decir es muy pequeño, entonces es muestra mejor
 # las diferencias que se comentaron justamente arriba.
 
-#-
-x = rango1
-y = abs.(raices2)
-scatter(x, y,title = "X0 vs Raíz", xlabel = "Condición inicial", ylabel = "Raíz" , label = "Raíz",fmt = :png )
+
 
 #-
 # Generamos 2 nuevas funciones, $g$ y $dg$, en términos de la misma variable.
