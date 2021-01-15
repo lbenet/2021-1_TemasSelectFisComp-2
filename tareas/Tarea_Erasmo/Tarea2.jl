@@ -193,7 +193,7 @@ end;
 # en el punto $x_0=1$ usando aritmética de racionales.
 
 f(x) = (3x^2-8x+5)/(7x^3-1)
-f(dual(1.0))
+f(dual(1.0)), f(dual(1//1)) 
 #-
 
 # - Evalúen analíticamente (usando el álgebra  de duales) la 
@@ -223,10 +223,14 @@ f(dual(1.0))
 #         &= \left(0, - \frac{1}{3} \right)
 # \end{align}
 #
-# Este resultado analítico es consistente con el resultado
-# numérico $(0.0, -0.3333333333333333)$, donde la diferencia
+# Este resultado analítico es igual igual al encontrado usando
+# aritmética de racionales que a su vez es consistente con el 
+# resultado numérico $(0.0, -0.3333333333333333)$. La diferencia
 # entre los resultados de ambos métodos se debe únicamente al
 # redondeo de la computadora, que usa números de punto flotante.
+# Esto muestra que usando duales se pueden hacer cálculos exactos
+# de la derivada siempre y cuando la función de interés sea 
+# racional y se use aritmética de racionales.
 #-
 
 # ## 3
@@ -308,7 +312,7 @@ log(b, D::Dual) = Dual( log(b, D[1]), D[2] / (log(b) * D[1]) )
         @test tanh( dual(log(5)) ) == Dual(12 / 13, sech(log(5))^2)
     end
     
-    @testset "Hiperbílicas Inversas" begin
+    @testset "Hiperbólicas Inversas" begin
         @test asinh( dual(1) ) == Dual(asinh(1), 1 / sqrt(2))
         @test asinh( dual(sqrt(3)) ) == Dual(asinh(sqrt(3)), 1 / sqrt(1 + sqrt(3)^2))
         @test acosh( dual(sqrt(2)) ) == Dual(acosh(sqrt(2)), 1 / sqrt(sqrt(2)^2 - 1))
