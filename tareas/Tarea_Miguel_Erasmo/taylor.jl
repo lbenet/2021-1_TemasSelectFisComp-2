@@ -1,3 +1,6 @@
+module SeriesTaylor
+export Taylor
+
 """
 Definición de polinomios de Taylor, donde
 
@@ -65,4 +68,6 @@ function ^(T::Taylor, n::Int)
     elseif n < 0
         (inv(T))^n
     end
+end
+
 end

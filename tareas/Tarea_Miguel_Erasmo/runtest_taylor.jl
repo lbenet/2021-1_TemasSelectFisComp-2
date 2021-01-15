@@ -1,4 +1,5 @@
-using Test
+include("taylor.jl")
+using Test, SeriesTaylor
 
 @testset "Taylor: Operaciones" begin
     
