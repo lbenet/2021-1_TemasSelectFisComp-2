@@ -1,24 +1,4 @@
 """
-Producto entrada a entrada de dos arreglos.
-La entrada deben de ser dos arreglos unidimensionales
-del mismo tamaño. La salida es un arreglo cuyas
-entradas son el producto de las entradas de los
-dos arreglos. Es decir, si se tienen dos arreglos,
-uno A con entradas a_i y otro B con entradas b_i,
-entonces prod(A, B) devuelve un arreglo con entradas
-a_i b_i. prod(v, v) es equivalente a v.^2 
-"""
-function prod(v1, v2)
-    v = typeof( promote(v1[1], v2[1])[1] )[]
-    
-    for i in 1:length(v1)
-        push!(v, v1[i] * v2[i])
-    end
-    
-    return v
-end
-
-"""
 Definición de polinomios de Taylor, donde
 
 orden es el orden del polinomio de Taylor.
@@ -57,7 +37,7 @@ function *(T1::Taylor, T2::Taylor)
     polim = eltype( promote(T1.polim[1], T2.polim[1]) )[]
     
     for i in 1:T1.orden+1
-        aux = prod(T1.polim[1:i], reverse(T2.polim[1:i]))
+        aux = T1.polim[1:i] .* reverse(T2.polim[1:i])
         push!(polim, sum(aux))
     end
     
@@ -69,7 +49,7 @@ function /(T1::Taylor, T2::Taylor)
     polim = [aux1 * T1.polim[1]]
     
     for i in 2:T1.orden+1
-        aux2 = sum( prod(polim[1:i-1], reverse(T2.polim[2:i])) )
+        aux2 = sum( polim[1:i-1] .* reverse(T2.polim[2:i]) )
         push!(polim, aux1 * (T1.polim[i] - aux2) )
     end
     
