@@ -25,5 +25,4 @@
 
 include("taylor.jl")
 include("runtest_taylor.jl")
-using SeriesTaylor
 #-
