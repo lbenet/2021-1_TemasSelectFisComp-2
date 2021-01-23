@@ -20,19 +20,22 @@ end
 import Base: +, -, *, /, inv, ==, ^
 
 +(T::Taylor) = T
-+(c::Number, T::Taylor) = (T.polim[1] += c; T)
-+(T::Taylor, c::Number) = (T.polim[1] += c; T)
++(c::Number, T::Taylor) = Taylor( vcat([T.polim[1] + c], T.polim[2:end]) )
++(T::Taylor, c::Number) = +(c::Number, T::Taylor)
 +(T1::Taylor, T2::Taylor) = Taylor( T1.polim + T2.polim )
 
 -(T::Taylor) = Taylor( -T.polim )
--(T::Taylor, c::Number) = (T.polim[1] -= c; T)
--(c::Number, T::Taylor) = (T.polim[1] -= c; Taylor( -T.polim ))
+-(c::Number, T::Taylor) = Taylor( vcat([-T.polim[1] + c], -T.polim[2:end]) )
+-(T::Taylor, c::Number) = Taylor( vcat([T.polim[1] - c], T.polim[2:end]) )
 -(T1::Taylor, T2::Taylor) = Taylor( T1.polim - T2.polim )
 
-*(c::Number, T::Taylor) = Taylor( c * T1.polim[1] )
+*(c::Number, T::Taylor) = Taylor( c * T.polim )
 *(T::Taylor, c::Number) = *(c::Number, T::Taylor)
 
-inv(T::Taylor) = Taylor(T.orden, [1]) / T
+inv(T::Taylor) = Taylor(T.orden, [one( eltype(T.polim) )]) / T
+
+/(c::Number, T::Taylor) = c * inv(T)
+/(T::Taylor, c::Number) = Taylor( T.polim / c )
 
 ==(T1::Taylor, T2::Taylor) = T1.polim == T2.polim
 
@@ -60,13 +63,13 @@ function /(T1::Taylor, T2::Taylor)
 end
 
 function ^(T::Taylor, n::Int)
-    n == 0 && return Taylor(T.orden, [1])
+    n == 0 && return Taylor(T.orden, [one( eltype(T.polim) )])
     n == 1 && return T
     
     if n > 1
         T * T^(n - 1)
     elseif n < 0
-        (inv(T))^n
+        (inv(T))^abs(n)
     end
 end
 
