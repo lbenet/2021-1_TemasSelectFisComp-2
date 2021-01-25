@@ -17,7 +17,7 @@ struct Taylor{T <: Number}
     Taylor(orden, polim) = new{eltype(polim)}(orden, vcat( polim, zeros(eltype(polim), orden + 1 - length(polim) ) ) )
 end
 
-import Base: +, -, *, /, inv, ==, ^
+import Base: +, -, *, /, inv, ==, exp, log, sin, cos, ^
 
 +(T::Taylor) = T
 +(c::Number, T::Taylor) = Taylor( vcat([T.polim[1] + c], T.polim[2:end]) )
@@ -72,5 +72,45 @@ function ^(T::Taylor, n::Int)
         (inv(T))^abs(n)
     end
 end
+
+function exp(T::Taylor)
+    polim = [exp(T.polim[1])]
+    
+    for i in 2:T.orden+1
+        push!(polim, inv(i-1) * sum([j for j in (i-1):-1:1] .* reverse(T.polim[2:i]) .* polim[1:i-1]) )
+    end
+    
+    return Taylor(polim)
+end
+
+function log(T::Taylor)
+    p0 = T.polim[1]
+    polim = [log(p0)]
+    
+    for i in 2:T.orden+1
+        push!(polim, inv(p0) * ( T.polim[i] - inv(i-1) * sum([j for j in 0:i-2] .* reverse(T.polim[2:i]) .* polim[1:i-1])) )
+    end
+    
+    return Taylor(polim)
+end
+
+function ^(T::Taylor, α)
+    p0 = T.polim[1]
+    polim = [p0^α]
+    
+    for i in 2:T.orden+1
+        push!(polim, inv((i-1)*p0) * sum([α*(i-1-j)-j for j in 0:i-2] .* reverse(T.polim[2:i]) .* polim[1:i-1]) )
+    end
+    
+    return Taylor(polim)
+end
+
+"""
+Devuelve una tupla de dos entradas, siendo la primera el coseno
+de la serie de Taylor T y el segundo el seno de ésta misma serie.
+"""
+trig(T::Taylor) = (aux = exp(im*T); (Taylor(real(aux.polim)), Taylor(imag(aux.polim))))
+cos(T::Taylor) = Taylor(real(exp(im*T).polim))
+sin(T::Taylor) = Taylor(imag(exp(im*T).polim))
 
 end

@@ -171,6 +171,18 @@
 # $\mathcal{O}(k^3)$, lo que lo hace bastantemente más costoso
 # que resolver el sistema de forma simultánea.
 # 
+# Sin embargo, exite un método aún mejor. Se sabe que $$e^{ig(x)} = cos\big(g(x)\big) + i sin\big(g(x)\big) = C(x) + i S(x),$$
+# 
+# así que, de la regla de recurrencia de la exponencia se tiene que
+# 
+# $$ E_{[k]} = C_{[k]} + i S_{[k]} = \frac{1}{k} \sum_{j=0}^{k} (k-j) (ig_{[k-j]}) E_{[j]} = \frac{1}{k} \sum_{j=0}^{k} (k-j) g_{[k-j]} (iE_{[j]}) = \frac{1}{k} \sum_{j=0}^{k} (k-j) g_{[k-j]} (-S_{[j]} + i C_{[k]}), $$
+# 
+# de donde se sigue el sistema de ecuaciones previamente encontrado.
+# Puesto que ya se tiene una regla de recurrencia para la exponencial,
+# no hace falta hacer más trabajo para las reglas de recurrencia para
+# el seno y el coseno. Por esta razón es este último método el que es
+# implementado en el módulo.
+#
 # Se sabe que
 # 
 # $$ \sin(x) = \sum_{n=0}^{\infty} \frac{(-1)^{n+1}}{(2n+1)!} x^{2n+1},\quad \cos(x) = \sum_{n=0}^{\infty} \frac{(-1)^{n}}{(2n)!} x^{2n}. $$

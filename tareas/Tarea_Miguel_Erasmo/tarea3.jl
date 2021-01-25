@@ -199,6 +199,18 @@ include("runtest_taylor.jl")
 # calcularlos desde $k=1$ hasta $k$ implica una complejidad
 # $\mathcal{O}(k^3)$, lo que lo hace bastantemente más costoso
 # que resolver el sistema de forma simultánea.
+#
+# Sin embargo, exite un método aún mejor. Se sabe que $$e^{ig(x)} = cos\big(g(x)\big) + i sin\big(g(x)\big) = C(x) + i S(x),$$
+# 
+# así que, de la regla de recurrencia de la exponencia se tiene que
+# 
+# $$ E_{[k]} = C_{[k]} + i S_{[k]} = \frac{1}{k} \sum_{j=0}^{k} (k-j) (ig_{[k-j]}) E_{[j]} = \frac{1}{k} \sum_{j=0}^{k} (k-j) g_{[k-j]} (iE_{[j]}) = \frac{1}{k} \sum_{j=0}^{k} (k-j) g_{[k-j]} (-S_{[j]} + i C_{[k]}), $$
+# 
+# de donde se sigue el sistema de ecuaciones previamente encontrado.
+# Puesto que ya se tiene una regla de recurrencia para la exponencial,
+# no hace falta hacer más trabajo para las reglas de recurrencia para
+# el seno y el coseno. Por esta razón es este último método el que es
+# implementado en el módulo.
 # 
 # Se sabe que
 # 
@@ -225,3 +237,11 @@ include("runtest_taylor.jl")
 # Análogamente, $Y = C$ si $C_{[0]} = 1$ y $C_{[1]} = 0$,
 # con lo que se obtiene que $C_{[2k]} = (-1)^k/(2k)!$ y
 # $C_{[2k+1]} = 0$, que es lo que se quería comprobar.
+
+# ### 3
+# 
+# Para  las funciones anteriores, incluyendo la exponencial, implementen métodos 
+# adecuados para estas funciones en el módulo del ejercicio 1, que deben actuar sobre 
+# estructuras `Taylor`, e incluyan pruebas necesarias en `runtest_taylor.jl`.
+# 
+
