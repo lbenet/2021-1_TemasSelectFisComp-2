@@ -37,9 +37,8 @@
 # Dado que conocemos la solución analítica de este problema, grafiquen como función
 # de $t$ el error relativo de su integrador (respecto al valor del resultado analítico).
 
-
-using Plots, LaTeXStrings
 include("taylor.jl")
+using Plots, LaTeXStrings, .SeriesTaylor
 pgfplotsx()
 Plots.scalefontsizes(1.3)
 #-

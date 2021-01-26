@@ -1,22 +1,5 @@
-"""
-Producto entrada a entrada de dos arreglos.
-La entrada deben de ser dos arreglos unidimensionales
-del mismo tamaño. La salida es un arreglo cuyas
-entradas son el producto de las entradas de los
-dos arreglos. Es decir, si se tienen dos arreglos,
-uno A con entradas a_i y otro B con entradas b_i,
-entonces prod(A, B) devuelve un arreglo con entradas
-a_i b_i. prod(v, v) es equivalente a v.^2 
-"""
-function prod(v1, v2)
-    v = typeof( promote(v1[1], v2[1])[1] )[]
-    
-    for i in 1:length(v1)
-        push!(v, v1[i] * v2[i])
-    end
-    
-    return v
-end
+module SeriesTaylor
+export Taylor, trig
 
 """
 Definición de polinomios de Taylor, donde
@@ -34,30 +17,34 @@ struct Taylor{T <: Number}
     Taylor(orden, polim) = new{eltype(polim)}(orden, vcat( polim, zeros(eltype(polim), orden + 1 - length(polim) ) ) )
 end
 
-import Base: +, -, *, /, inv, ==, ^
+import Base: +, -, *, /, inv, ==, exp, log, sin, cos, ^, isapprox
 
 +(T::Taylor) = T
-+(c::Number, T::Taylor) = (T.polim[1] += c; T)
-+(T::Taylor, c::Number) = (T.polim[1] += c; T)
++(c::Number, T::Taylor) = Taylor( vcat([T.polim[1] + c], T.polim[2:end]) )
++(T::Taylor, c::Number) = +(c::Number, T::Taylor)
 +(T1::Taylor, T2::Taylor) = Taylor( T1.polim + T2.polim )
 
 -(T::Taylor) = Taylor( -T.polim )
--(T::Taylor, c::Number) = (T.polim[1] -= c; T)
--(c::Number, T::Taylor) = (T.polim[1] -= c; Taylor( -T.polim ))
+-(c::Number, T::Taylor) = Taylor( vcat([-T.polim[1] + c], -T.polim[2:end]) )
+-(T::Taylor, c::Number) = Taylor( vcat([T.polim[1] - c], T.polim[2:end]) )
 -(T1::Taylor, T2::Taylor) = Taylor( T1.polim - T2.polim )
 
-*(c::Number, T::Taylor) = Taylor( c * T1.polim[1] )
+*(c::Number, T::Taylor) = Taylor( c * T.polim )
 *(T::Taylor, c::Number) = *(c::Number, T::Taylor)
 
-inv(T::Taylor) = Taylor(T.orden, [1]) / T
+inv(T::Taylor) = Taylor(T.orden, [one( eltype(T.polim) )]) / T
+
+/(c::Number, T::Taylor) = c * inv(T)
+/(T::Taylor, c::Number) = Taylor( T.polim / c )
 
 ==(T1::Taylor, T2::Taylor) = T1.polim == T2.polim
+isapprox(T1::Taylor, T2::Taylor) = T1.polim ≈ T2.polim
 
 function *(T1::Taylor, T2::Taylor)
     polim = eltype( promote(T1.polim[1], T2.polim[1]) )[]
     
     for i in 1:T1.orden+1
-        aux = prod(T1.polim[1:i], reverse(T2.polim[1:i]))
+        aux = T1.polim[1:i] .* reverse(T2.polim[1:i])
         push!(polim, sum(aux))
     end
     
@@ -69,20 +56,84 @@ function /(T1::Taylor, T2::Taylor)
     polim = [aux1 * T1.polim[1]]
     
     for i in 2:T1.orden+1
-        aux2 = sum( prod(polim[1:i-1], reverse(T2.polim[2:i])) )
+        aux2 = sum( polim[1:i-1] .* reverse(T2.polim[2:i]) )
         push!(polim, aux1 * (T1.polim[i] - aux2) )
     end
     
     return Taylor(polim)
 end
 
-function ^(T::Taylor, n::Int)
-    n == 0 && return Taylor(T.orden, [1])
-    n == 1 && return T
+# function ^(T::Taylor, n::Int)
+#     n == 0 && return Taylor(T.orden, [one( eltype(T.polim) )])
+#     n == 1 && return T
+# 
+#     if n > 1
+#         T * T^(n - 1)
+#     elseif n < 0
+#         (inv(T))^abs(n)
+#     end
+# end
+
+function exp(T::Taylor)
+    polim = [exp(T.polim[1])]
     
-    if n > 1
-        T * T^(n - 1)
-    elseif n < 0
-        (inv(T))^n
+    for i in 2:T.orden+1
+        push!(polim, inv(i-1) * sum([j for j in (i-1):-1:1] .* reverse(T.polim[2:i]) .* polim[1:i-1]) )
     end
+    
+    return Taylor(polim)
+end
+
+function log(T::Taylor)
+    p0 = T.polim[1]
+    polim = [log(p0)]
+    
+    for i in 2:T.orden+1
+        push!(polim, inv(p0) * ( T.polim[i] - inv(i-1) * sum([j for j in 0:i-2] .* reverse(T.polim[2:i]) .* polim[1:i-1])) )
+    end
+    
+    return Taylor(polim)
+end
+
+function ^(T::Taylor, α)
+    p0 = T.polim[1]
+    orden = T.orden
+    
+    if p0 == 0 && α == Int(α) && α>0
+        orden_min = zero(Int)
+        
+        for i in 2:orden+1
+            if T.polim[i] != 0
+                orden_min = i-1
+                break
+            end
+        end
+        
+        nuevo_orden_min = α * orden_min
+        if orden_min == 0 || nuevo_orden_min > orden
+            polim = [zero(eltype(T))]
+        else
+            T_aux = Taylor(T.polim[orden_min+1:end])^α
+            polim = vcat(zeros(eltype(T_aux.polim), nuevo_orden_min), T_aux.polim[1:orden + 1 - nuevo_orden_min])
+        end
+    else
+    
+        polim = [p0^α]
+
+        for i in 2:T.orden+1
+            push!(polim, inv((i-1)*p0) * sum([α*(i-1-j)-j for j in 0:i-2] .* reverse(T.polim[2:i]) .* polim[1:i-1]) )
+        end
+    end
+
+    return Taylor(polim)
+end
+
+"""
+Devuelve una tupla de dos entradas, siendo la primera el coseno
+de la serie de Taylor T y el segundo el seno de ésta misma serie.
+"""
+trig(T::Taylor) = (aux = exp(im*T); (Taylor(real(aux.polim)), Taylor(imag(aux.polim))))
+cos(T::Taylor) = Taylor(real(exp(im*T).polim))
+sin(T::Taylor) = Taylor(imag(exp(im*T).polim))
+
 end
