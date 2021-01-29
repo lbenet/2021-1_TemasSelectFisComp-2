@@ -22,9 +22,9 @@ Pueden seguir las instrucciones descritas en [clases/README.md](../clases/README
 A continuación se especifican las fechas en que el PR con la tarea debe ser enviado y en que el PR debe ser aceptado. Consideren que la fecha aceptación involucra toda la discusión *antes* de que el PR esté correcto y la tarea aceptada. Hay cierta flexibilidad, pero no hay que confiar ciegamente en eso.
 
 
-|                                   | PR inicial | Aceptación del PR  |         Estado         |
-|:------------------|:------------------------:|:-----------------------:|:----------------------:|
-|        Tarea 1            |  23/10/2020 |  13/11/2020  | Abierta  |
-|        Tarea 2            |  13/11/2020 |  23/11/2020  | Abierta  |
-
-
+|                   | PR inicial | Aceptación del PR  |         Estado         |
+|:------------------|:----------:|:------------------:|:----------------------:|
+|        Tarea 1            |  23/10/2020 |  08/01/2021  | Abierta  |
+|        Tarea 2            |  13/11/2020 |  08/01/2021  | Abierta  |
+|        Tarea 3            |  04/12/2020 |  08/01/2021  | Abierta  |
+|        Tarea 4            |  04/01/2021 |  08/01/2021  | Abierta  |
