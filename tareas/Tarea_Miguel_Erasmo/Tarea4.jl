@@ -39,10 +39,10 @@
 
 using Pkg
 Pkg.activate("../../")
+include("taylor.jl")
 using Plots, LaTeXStrings, .SeriesTaylor
 pgfplotsx()
 Plots.scalefontsizes(1.3)
-include("taylor.jl")
 #-
 
 """
@@ -166,14 +166,19 @@ integrador(cuadrado, 3, 0, 1/3 - 1e-9)[end,:], integrador(cuadrado, 3, 0, 1/3 + 
 x(t) = 3 / (1 - 3*t)
 error_relativo(t, x0) = abs(1 - x0 / x(t))
 
-t, x0 = (datos = integrador(cuadrado, 3, 0, 0.3333); (datos[:,1], datos[:,2]))
+datos1 = integrador(cuadrado, 3, 0, 0.3333, 29, 1e-16)
+t1, x01 = datos1[:,1], datos1[:,2]
 
-plot(t, error_relativo.(t, x0 .+ 1e-15), yscale = :log10, key = false, title = "Serie de Taylor: error relativo", ylabel = L"e(t)", xlabel = L"t")
+datos2 = integrador(cuadrado, 3, 0, 0.3333, 29, 1e-24)
+t2, x02 = datos2[:,1], datos2[:,2]
+
+plot(t1, error_relativo.(t1, x01) .+ 1e-20, label = L"\epsilon = 10^{-16}", yscale = :log10, title = "Serie de Taylor: error relativo", ylabel = L"e(t)", xlabel = L"t")
+plot!(t2, error_relativo.(t2, x02) .+ 1e-20, label = L"\epsilon = 10^{-24}")
 #-
 
 # El error relativo es prácticamente nulo en un intervalo desde
 # $0$ hata alrededor de $0.25$. Después de ello, el error relativo
-# es del orden de $10^{-15}$ y crece muy rápida mente hasta el
+# es del orden de $10^{-15}$ y crece muy rápidamente hasta el
 # orde de $10^{-12}$ cerca de $0.3333$.
 
 # ## 2
@@ -202,7 +207,6 @@ plot(t, error_relativo.(t, x0 .+ 1e-15), yscale = :log10, key = false, title = "
 #     & k_1(x,\, h) = f(x), & k_2(x, h) = f(x + hk_1/2) \\
 #     & k_3(x, h) = f(x + hk_2/2), &k_4(x, h) = f(x + hk_3) .
 # \end{align}
-# -
 
 """
 Calcula la K(x, h) del método de Runge Kutta.
@@ -275,9 +279,10 @@ RK4(cuadrado, 3, 0, 0.5)[end,:]
 
 RK4(cuadrado, 3, 0, 1/3 - 1e-6)[end,:], RK4(cuadrado, 3, 0, 1/3 + 1e-6)[end,:]
 
-t, x0 = (datos = RK4(cuadrado, 3, 0, 0.3333); (datos[:,1][1:Int(floor(end/100)):end], datos[:,2][1:Int(floor(end/100)):end]))
+datos = RK4(cuadrado, 3, 0, 0.3333)[1:Int(floor(end/100)):end,:]
+t, x0 = datos[:,1][1:Int(floor(end/100)):end], datos[:,2][1:Int(floor(end/100)):end]
 
-plot(t, error_relativo.(t, x0 .+ 1e-15), yscale = :log10, key = false, title = "Runge Kutta: error relativo", ylabel = L"e(t)", xlabel = L"t")
+plot(t, error_relativo.(t, x0) .+ 1e-15, yscale = :log10, key = false, title = "Runge Kutta: error relativo", ylabel = L"e(t)", xlabel = L"t")
 #-
 
 # En la gráfica anterior se observa una recta entre $0.1$ y $0.3$. Como la escala es
@@ -286,5 +291,6 @@ plot(t, error_relativo.(t, x0 .+ 1e-15), yscale = :log10, key = false, title = "
 # relativo crece muy rápido cerca de $0.3333$. Sin embargo, una gran diferencia
 # entre ambos métodos es que el de Taylor presenta errores relativos que son de tres
 # a seis órdenes de magnitud menores, además de que demora menos tiempo en realizar
-# los cálculos.
-# -
+# los cálculos. El método de Runge Kutta demora más en hacer los cálculos porque
+# depende del tamaño de paso y se está tomando un paso pequeño justamente para
+# dismunuir el error
