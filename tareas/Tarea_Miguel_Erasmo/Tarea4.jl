@@ -133,7 +133,7 @@ Argumentos:
     p -> orden de la serie de Taylor.
     ϵ -> cota para el residuo de una serie de Taylor.
 """
-function integrador(f, x0, t0, tf, p = 29, ϵ = 1e-16)
+function integrador(f, x0, t0, tf, p = 29, ϵ = 1e-24)
     datos = promote_type(typeof(x0), typeof(ϵ))[t0, x0]
 
     while t0 < tf
