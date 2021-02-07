@@ -77,7 +77,7 @@ function paso(T::Taylor, ϵ)
     p = T.orden
     aux = T.polim[p:p+1]
     aux = ϵ * (abs ∘ inv).(aux)
-    aux = [aux[i]^(1 / (p-2+i)) for i in 1:2]
+    aux = [aux[i]^(1 / (p+i)) for i in 1:2]
     return minimum(aux)
 end
 #-
