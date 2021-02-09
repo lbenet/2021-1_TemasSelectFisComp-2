@@ -1,5 +1,5 @@
 module SeriesTaylor
-export Taylor, serie, trig
+export Taylor, serie, trig, coeficientes, paso, Horner, paso_Taylor, paso_integracion, integrador_taylor, integrador, graficador
 
 """
 Definición de polinomios de Taylor, donde
@@ -150,7 +150,7 @@ Argumentos:
 function coeficientes(f, t, x0::Array, p)
     n = length(x0)
     polim = Array{promote_type(Float64,eltype(x0)),1}(x0)
-    aux(polim::Array) = [Taylor(permutedims(reshape(polim,n,:))[:,i]) for i in 1:n]
+    aux(polim::Array) = [Taylor(p, permutedims(reshape(polim,n,:))[:,i]) for i in 1:n]
 
     for i in 1:p
         polim = vcat(polim, getindex.(serie.(f(t, aux(polim))), i) / i)
